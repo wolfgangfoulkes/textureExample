@@ -16,8 +16,8 @@ void ofApp::setup(){
     outImage = inImage;
     outImage.resize(w, h); //can do this with pixels as well.
     outImage.setImageType(OF_IMAGE_COLOR_ALPHA);
-    cout << "inImage.type" << inImage.type;
-    cout << "outImage.type" << outImage.type;
+    cout << "inImage.type:" << inImage.type << "/n";
+    cout << "outImage.type:" << outImage.type << "/n";
     
 	
 	grayPixels			= new unsigned char [w*h];
