@@ -12,12 +12,24 @@ void ofApp::setup(){
 	texColor.allocate(w,h,GL_RGB);
 	texColorAlpha.allocate(w,h,GL_RGBA);
     
-    inImage.loadImage("pixelkid.jpg");
+    ofLoadImage(inImage, "pixelkid.jpg"); //people talk about the redundancy of ofImage. should just use ofPixels.
     outImage = inImage;
     outImage.resize(w, h); //can do this with pixels as well.
     outImage.setImageType(OF_IMAGE_COLOR_ALPHA);
-    cout << "inImage.type:" << inImage.type << "/n";
-    cout << "outImage.type:" << outImage.type << "/n";
+    cout << "inImage.getImageType():" << inImage.getImageType() << "\n"; //returns "type 1" meaning without alpha
+    cout << "outImage.getImageType():" << outImage.getImageType() << "\n"; //returns "type 2" meaning there's alpha
+    cout << "outImage.getHeight" << outImage.getHeight() << "\n";
+    cout << "outImage.getWidth" << outImage.getWidth() << "\n";
+
+
+    /*
+    switch (outImage.type)
+    {
+        case 0:
+        case 1:
+        case 2:
+    }
+     */
     
 	
 	grayPixels			= new unsigned char [w*h];
@@ -25,7 +37,23 @@ void ofApp::setup(){
 	colorAlphaPixels	= new unsigned char [w*h*4];
     outImagePixels      = outImage.getPixels();
     //getPixelsRef is safer, because it returns an ofPixels object. this could be RGB or RGBA, meaning different sizes.
-
+    
+    
+    for (int i = 0; i < h; i++) //actual height is h * bpp
+    {
+        for (int ii = 0; ii < w; ii++)
+        {
+            int index = (ii + (i * w)) * 4;
+            unsigned char r = outImagePixels[index + 0]; //0 * 4 + 0
+            unsigned char g = outImagePixels[index + 1]; //0 * 4 + 1
+            unsigned char b = outImagePixels[index + 2]; //0 * 4 + 2
+            unsigned char a = outImagePixels[index + 3]; //0 * 4 + 2;
+            //if (b >= 255/2) { outImagePixels[index + 3] = 0; }
+            if (b > r && b > g) { outImagePixels[index + 3] = 0; }
+            
+            cout << r << "," << g << "," << b << "," << a << "\n" ;
+        }
+    }
 
 	// gray pixels, set them randomly
 	for (int i = 0; i < w*h; i++){
@@ -52,11 +80,10 @@ void ofApp::setup(){
 		}
 	}
 	
-	
 	texGray.loadData(grayPixels, w,h, GL_LUMINANCE); 
 	texColor.loadData(colorPixels, w,h, GL_RGB);
 	texColorAlpha.loadData(colorAlphaPixels, w,h, GL_RGBA);
-
+    texOutImage.loadData(outImagePixels, w, h, GL_RGBA);
 }
  
 
@@ -87,6 +114,7 @@ void ofApp::draw(){
 	
 	ofEnableAlphaBlending();
 	texColorAlpha.draw(250,200,w,h);
+    texOutImage.draw(450, 400,w,h);
 	ofDisableAlphaBlending();
 
 }

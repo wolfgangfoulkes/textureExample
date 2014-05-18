@@ -20,14 +20,13 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-        ofImage         inImage;
-        ofImage         outImage;
-
+        ofPixels         inImage;
+        ofPixels         outImage;
 		
 		ofTexture		texGray;
 		ofTexture 		texColor;
 		ofTexture		texColorAlpha;
-        ofTexture       outImageTex;
+        ofTexture       texOutImage;
     
     
 
